@@ -21,7 +21,6 @@ typedef struct element {
 } el_listy;
 
 el_listy *first;
-el_listy *head;
 
 void dodaj(el_listy *lista, int i, string tab[], int size)
 {
@@ -56,8 +55,9 @@ void dodaj_do_listy_z_pliku(el_listy *lista)
 {
 	fstream plik;
 	plik.open("plik.txt", ios::in);
-	string tab[16];
-	for (int i = 0; i < 16; i++)
+#define size 24
+	string tab[size];
+	for (int i = 0; i < size; i++)
 	{
 		string line;
 		getline(plik, line);
@@ -65,9 +65,9 @@ void dodaj_do_listy_z_pliku(el_listy *lista)
 	}
 	plik.close();
 	int i = 0;
-	while (i < 16)
+	while (i < size)
 	{
-		dodaj(first, i, tab, 16);
+		dodaj(first, i, tab, size);
 		i = i + 8;
 	}
 }
@@ -94,17 +94,19 @@ void dodaj_do_listy(el_listy *lista, string nazwa, string kategoria, int cena, s
 	wsk->next = nowy; /*podczepiam wsk po ten element*/
 }
 
-void usun_z_listy(el_listy *lista, int nr)
+int usun_z_listy(el_listy *lista, int nr)
 {
 	el_listy *wsk = lista;
 	while (wsk->next != NULL)
 	{
-		if (wsk->next->unikalny_nr == nr)
+		if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy == "Brak"))
 		{
 			el_listy *usuwany = wsk->next;
 			wsk->next = usuwany->next;   /* przesuwam wsk aby omijal usuwany el */
 			delete(usuwany);
 		}
+		else if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy != "Brak"))
+			return 4;
 		else
 		{
 			wsk = wsk->next;
@@ -251,7 +253,12 @@ int main()
 			int numerek;
 			cout << "Podaj ID aukcji ktora chcesz usuanac: " << endl;
 			cin >> numerek;
-			usun_z_listy(first, numerek);
+			if (usun_z_listy(first, numerek) == 4)
+			{
+				system("CLS");
+				cout << "Nie mozna usunac aukcji, poniewaz ktos juz kupil na niej przedmiot" << endl;
+			}
+			wypisz_liste(first);
 			break;
 		case 6: exit(0); break;
 		}
@@ -259,24 +266,6 @@ int main()
 	case 2: cout << "Jeszcze nie napisana" << endl; break;
 	case 3: exit(0); break;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-
 
 	system("pause");
 	return 0;
