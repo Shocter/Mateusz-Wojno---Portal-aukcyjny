@@ -3,7 +3,7 @@ Rower
 Jednoslady
 Na sprzedaz
 1500
-Janusz Kowalski
+Jan Kowalski
 Brak
 Super rower, prawie nie uzywany. 
 Audi A4 B8
@@ -22,3 +22,35 @@ Na sprzedaz
 Przemyslaw Wisniewski
 Janusz Mazurski
 Super wydajny procesor Intel i5 6 generacji.
+Glosniki
+1350
+Akcesoria PC
+Na sprzedaz
+150
+Jan Kowalski
+Brak
+Logitech Z4, najlepsze glosniki w swojej cenie.
+Karta Graficzna
+1691
+Karty graficzne
+Na sprzedaz
+99
+Jan Kowalski
+Brak
+Nvidia GeForce GTX960, najlepsza w swojej polce cenowej.
+nazwa
+1501
+kateogira
+Na sprzedaz
+1234
+Jan Kowalski
+Brak
+opis
+Nazwa
+1298
+Kategoria
+Na sprzedaz
+1234
+Jan Kowalski
+Brak
+opis

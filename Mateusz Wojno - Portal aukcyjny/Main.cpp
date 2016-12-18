@@ -55,8 +55,16 @@ void dodaj_do_listy_z_pliku(el_listy *lista)
 {
 	fstream plik;
 	plik.open("plik.txt", ios::in);
-#define size 24
-	string tab[size];
+	int size = 0;
+	while (!plik.eof())
+	{
+		string l;
+		getline(plik, l);
+		size++;
+	}
+	plik.close();
+	string *tab = new string[size];
+	plik.open("plik.txt", ios::in);
 	for (int i = 0; i < size; i++)
 	{
 		string line;
@@ -70,6 +78,7 @@ void dodaj_do_listy_z_pliku(el_listy *lista)
 		dodaj(first, i, tab, size);
 		i = i + 8;
 	}
+	delete[] tab;
 }
 
 void dodaj_do_listy(el_listy *lista, string nazwa, string kategoria, int cena, string opis)
@@ -92,6 +101,19 @@ void dodaj_do_listy(el_listy *lista, string nazwa, string kategoria, int cena, s
 	nowy->opis = opis;
 	nowy->next = NULL;
 	wsk->next = nowy; /*podczepiam wsk po ten element*/
+
+	fstream plik;
+	plik.open("plik.txt", ios::app);
+	plik << endl;
+	plik << nazwa << endl;
+	plik << (std::rand() % 889) + 1111 << endl;
+	plik << kategoria << endl;
+	plik << "Na sprzedaz" << endl;
+	plik << cena << endl;
+	plik << "Jan Kowalski" << endl;
+	plik << "Brak" << endl;
+	plik << opis;
+	plik.close();
 }
 
 int usun_z_listy(el_listy *lista, int nr)
@@ -124,7 +146,7 @@ void wypisz_liste(el_listy *lista)
 		cout << wsk->nazwa;
 		cout.width(10);
 		cout << wsk->unikalny_nr;
-		cout.width(15);
+		cout.width(20);
 		cout << wsk->kategoria;
 		cout.width(15);
 		cout << wsk->status;
@@ -197,7 +219,7 @@ int main()
 		cout << "Nazwa przedmiotu";
 		cout.width(10);
 		cout << "ID";
-		cout.width(15);
+		cout.width(20);
 		cout << "Kategoria";
 		cout.width(15);
 		cout << "Status";
@@ -227,19 +249,22 @@ int main()
 		{
 		case 1:
 			system("CLS");
-			logo();
+			//logo();
 
 			cout << "Podaj nazwe ";
+			cin.clear();
+			cin.ignore();
 			getline(cin, nazwa);
 			cout << "Podaj kateorie ";
 			getline(cin, kategoria);
 			cout << "Podaj cene ";
 			cin >> cena;
 			cout << "Podaj opis ";
+			cin.clear();
+			cin.ignore();
 			getline(cin, opis);
 
 			dodaj_do_listy(first, nazwa, kategoria, cena, opis);
-
 			system("CLS");
 			logo();
 
@@ -262,6 +287,7 @@ int main()
 			break;
 		case 6: exit(0); break;
 		}
+		break;
 			
 	case 2: cout << "Jeszcze nie napisana" << endl; break;
 	case 3: exit(0); break;
