@@ -1,7 +1,7 @@
 Rower
 1013
 Jednoslady
-Na sprzedaz
+Sprzedane
 1500
 Jan Kowalski
 Brak
@@ -34,23 +34,15 @@ Karta Graficzna
 1691
 Karty graficzne
 Na sprzedaz
-99
+999
 Jan Kowalski
 Brak
 Nvidia GeForce GTX960, najlepsza w swojej polce cenowej.
-nazwa
-1501
-kateogira
+Saga ksiazek
+1673
+Ksiazki
 Na sprzedaz
-1234
+150
 Jan Kowalski
 Brak
-opis
-Nazwa
-1298
-Kategoria
-Na sprzedaz
-1234
-Jan Kowalski
-Brak
-opis
+Saga Wiedzminska w unikalnej cenie.

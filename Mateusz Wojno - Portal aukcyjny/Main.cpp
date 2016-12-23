@@ -101,18 +101,42 @@ void dodaj_do_listy(el_listy *lista, string nazwa, string kategoria, int cena, s
 	nowy->opis = opis;
 	nowy->next = NULL;
 	wsk->next = nowy; /*podczepiam wsk po ten element*/
+}
 
+void zapisz_do_pliku(el_listy *lista)
+{
+	el_listy *wsk = lista;
 	fstream plik;
-	plik.open("plik.txt", ios::app);
-	plik << endl;
-	plik << nazwa << endl;
-	plik << (std::rand() % 889) + 1111 << endl;
-	plik << kategoria << endl;
-	plik << "Na sprzedaz" << endl;
-	plik << cena << endl;
-	plik << "Jan Kowalski" << endl;
-	plik << "Brak" << endl;
-	plik << opis;
+	plik.open("plik.txt", ios::trunc | ios::out);
+	int i = 0;
+	while (wsk->next != NULL)
+	{
+		if (i == 0)
+		{
+			plik << wsk->next->nazwa << endl;
+			plik << wsk->next->unikalny_nr << endl;
+			plik << wsk->next->kategoria << endl;
+			plik << wsk->next->status << endl;
+			plik << wsk->next->cena << endl;
+			plik << wsk->next->wlasciciel << endl;
+			plik << wsk->next->kupujacy << endl;
+			plik << wsk->next->opis; 
+		}
+		else 
+		{
+			plik << endl;
+			plik << wsk->next->nazwa << endl;
+			plik << wsk->next->unikalny_nr << endl;
+			plik << wsk->next->kategoria << endl;
+			plik << wsk->next->status << endl;
+			plik << wsk->next->cena << endl;
+			plik << wsk->next->wlasciciel << endl;
+			plik << wsk->next->kupujacy << endl;
+			plik << wsk->next->opis;
+		}
+		wsk = wsk->next;
+		i++;
+	}
 	plik.close();
 }
 
@@ -129,6 +153,44 @@ int usun_z_listy(el_listy *lista, int nr)
 		}
 		else if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy != "Brak"))
 			return 4;
+		else
+		{
+			wsk = wsk->next;
+		}
+	}
+}
+
+int kup (el_listy *lista, int nr)
+{
+	el_listy *wsk = lista;
+	while (wsk->next != NULL)
+	{
+		if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy == "Brak"))
+		{
+			wsk->next->kupujacy = "Jan Kowalski";
+			wsk->next->status = "Sprzedane";
+		}
+		else if ((wsk->unikalny_nr == nr) && (wsk->kupujacy != "Brak"))
+			return 4;
+		else
+		{
+			wsk = wsk->next;
+		}
+	}
+}
+
+int edytuj(el_listy *lista, int nr, string nazwa, string kategoria, int cena, string opis)
+{
+	el_listy *wsk = lista;
+	while (wsk->next != NULL)
+	{
+		if (wsk->next->unikalny_nr == nr)
+		{
+			wsk->next->nazwa = nazwa;
+			wsk->next->kategoria = kategoria;
+			wsk->next->cena = cena;
+			wsk->next->opis = opis;
+		}
 		else
 		{
 			wsk = wsk->next;
@@ -205,93 +267,129 @@ int main()
 	cout << "Twoj wybor: ";
 	int wybor;
 	cin >> wybor;
-	switch (wybor)
+	if (wybor == 1)
 	{
-	case 1: 
-		system("CLS");
-
-		logo();
-
-		dodaj_do_listy_z_pliku(first); 
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-		cout << left;
-		cout.width(23);
-		cout << "Nazwa przedmiotu";
-		cout.width(10);
-		cout << "ID";
-		cout.width(20);
-		cout << "Kategoria";
-		cout.width(15);
-		cout << "Status";
-		cout.width(10);
-		cout << "Cena";
-		cout.width(25);
-		cout << "Wlasciciel";
-		cout.width(25);
-		cout << "Kupujacy";
-		cout.width(60);
-		cout << "Opis przedmiotu" << endl;
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15); 
-
-		wypisz_liste(first); 
-
-		cout << endl << "MENU WYBORU" << endl;
-		cout << "1. Wystaw przedmiot na sprzedaz" << endl;
-		cout << "2. Kup przedmiot" << endl;
-		cout << "3. Filtruj aukcje" << endl;
-		cout << "4. Edytuj aukcje" << endl;
-		cout << "5. Usun aukcje" << endl;
-		cout << "6. Wyjscie z programu" << endl;
-		cout << "Twoj wybor: ";
-		cin >> wybor;
-
-		switch (wybor)
+		dodaj_do_listy_z_pliku(first);
+		do
 		{
-		case 1:
 			system("CLS");
-			//logo();
 
-			cout << "Podaj nazwe ";
-			cin.clear();
-			cin.ignore();
-			getline(cin, nazwa);
-			cout << "Podaj kateorie ";
-			getline(cin, kategoria);
-			cout << "Podaj cene ";
-			cin >> cena;
-			cout << "Podaj opis ";
-			cin.clear();
-			cin.ignore();
-			getline(cin, opis);
-
-			dodaj_do_listy(first, nazwa, kategoria, cena, opis);
-			system("CLS");
 			logo();
 
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+			cout << left;
+			cout.width(23);
+			cout << "Nazwa przedmiotu";
+			cout.width(10);
+			cout << "ID";
+			cout.width(20);
+			cout << "Kategoria";
+			cout.width(15);
+			cout << "Status";
+			cout.width(10);
+			cout << "Cena";
+			cout.width(25);
+			cout << "Wlasciciel";
+			cout.width(25);
+			cout << "Kupujacy";
+			cout.width(60);
+			cout << "Opis przedmiotu" << endl;
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
 			wypisz_liste(first);
 
-			break;
-		case 2: cout << "Jeszcze nie napisana" << endl; break;
-		case 3: cout << "Jeszcze nie napisana" << endl; break;
-		case 4: cout << "Jeszcze nie napisana" << endl; break;
-		case 5: 
-			int numerek;
-			cout << "Podaj ID aukcji ktora chcesz usuanac: " << endl;
-			cin >> numerek;
-			if (usun_z_listy(first, numerek) == 4)
+			cout << endl << "MENU WYBORU" << endl;
+			cout << "1. Wystaw przedmiot na sprzedaz" << endl;
+			cout << "2. Kup przedmiot" << endl;
+			cout << "3. Filtruj aukcje" << endl;
+			cout << "4. Edytuj aukcje" << endl;
+			cout << "5. Usun aukcje" << endl;
+			cout << "6. Wyjscie z programu" << endl;
+			cout << "Twoj wybor: ";
+			cin >> wybor;
+
+			switch (wybor)
 			{
+			case 1:
 				system("CLS");
-				cout << "Nie mozna usunac aukcji, poniewaz ktos juz kupil na niej przedmiot" << endl;
+				//logo();
+
+				cout << "Podaj nazwe ";
+				cin.clear();
+				cin.ignore();
+				getline(cin, nazwa);
+				cout << "Podaj kateorie ";
+				getline(cin, kategoria);
+				cout << "Podaj cene ";
+				cin >> cena;
+				cout << "Podaj opis ";
+				cin.clear();
+				cin.ignore();
+				getline(cin, opis);
+
+				dodaj_do_listy(first, nazwa, kategoria, cena, opis);
+				zapisz_do_pliku(first);
+				break;
+			case 2:
+				cout << "Podaj ID aukcji: ";
+				int id;
+				cin >> id;
+				if (kup(first, id) == 4)
+				{
+					system("CLS");
+					cout << "Nie mozna kupic przedmiotu, poniewaz ktos juz go kupil" << endl;
+				}
+				zapisz_do_pliku(first);
+				break;
+			case 3: 
+				cout << "Jeszcze nie napisana" << endl;
+				break;
+			case 4:  
+				string nazwa;
+				string kategoria;
+				string status;
+				int cena;
+				string opis;
+				cout << "Podaj ID aukcji: ";
+				int id;
+				cin >> id;
+				cout << "Podaj nazwe ";
+				cin.clear();
+				cin.ignore();
+				getline(cin, nazwa);
+				cout << "Podaj kateorie ";
+				getline(cin, kategoria);
+				cout << "Podaj cene ";
+				cin >> cena;
+				cout << "Podaj opis ";
+				cin.clear();
+				cin.ignore();
+				getline(cin, opis);
+
+				edytuj(first, id, nazwa, kategoria, cena, opis);
+				zapisz_do_pliku(first);
+				break;
+			case 5:
+				cout << "Podaj ID aukcji ktora chcesz usuanac: ";
+				cin >> id;
+				if (usun_z_listy(first, id) == 4)
+				{
+					system("CLS");
+					cout << "Nie mozna usunac aukcji, poniewaz ktos juz kupil na niej przedmiot" << endl;
+				}
+				zapisz_do_pliku(first);
+				break;
+			case 6: exit(0); break;
 			}
-			wypisz_liste(first);
-			break;
-		case 6: exit(0); break;
-		}
-		break;
-			
-	case 2: cout << "Jeszcze nie napisana" << endl; break;
-	case 3: exit(0); break;
+		} while (true);
 	}
+	else if (wybor == 2)
+	{
+		cout << "Jeszcze nie napisana" << endl;
+	}
+
+	else if (wybor == 3)
+	exit(0);
 
 	system("pause");
 	return 0;
