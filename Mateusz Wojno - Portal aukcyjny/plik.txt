@@ -1,7 +1,7 @@
 Rower
 1013
 Jednoslady
-Sprzedane
+Na sprzedaz
 1500
 Jan Kowalski
 Brak
@@ -9,10 +9,10 @@ Super rower, prawie nie uzywany.
 Audi A4 B8
 1101
 Samochody
-Na sprzedaz
+Sprzedane
 62999
 Miroslaw Kwasniewski
-Brak
+Jan Kowalski
 Samochod z 2013 roku, z malym przebiegiem, zadbany.
 Intel i5 6600K
 1110
@@ -46,3 +46,11 @@ Na sprzedaz
 Jan Kowalski
 Brak
 Saga Wiedzminska w unikalnej cenie.
+nazwa
+1637
+ada
+Sprzedane
+121
+Kazimierz Wielki
+Jan Kowalski
+ops

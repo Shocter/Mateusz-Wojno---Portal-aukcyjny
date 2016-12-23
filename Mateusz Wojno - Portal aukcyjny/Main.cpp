@@ -160,18 +160,31 @@ int usun_z_listy(el_listy *lista, int nr)
 	}
 }
 
-int kup (el_listy *lista, int nr)
+void kup (el_listy *lista, int nr)
 {
 	el_listy *wsk = lista;
 	while (wsk->next != NULL)
 	{
-		if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy == "Brak"))
+		if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy == "Brak") && (wsk->next->wlasciciel != "Jan Kowalski"))
 		{
 			wsk->next->kupujacy = "Jan Kowalski";
 			wsk->next->status = "Sprzedane";
+			cout << "Kupuje..." << endl;
+			wsk = wsk->next;
+			break;
 		}
-		else if ((wsk->unikalny_nr == nr) && (wsk->kupujacy != "Brak"))
-			return 4;
+		else if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy != "Brak"))
+		{
+			cout << "Nie mozna kupic przedmiotu, poniewaz ktos juz go kupil" << endl;
+			wsk = wsk->next;
+			break;
+		}
+		else if ((wsk->next->unikalny_nr == nr) && (wsk->next->wlasciciel == "Jan Kowalski"))
+		{
+			cout << "Nie mozesz kupic przedmiotu wystawionego przez siebie" << endl;
+			wsk = wsk->next;
+			break;
+		}
 		else
 		{
 			wsk = wsk->next;
@@ -179,7 +192,7 @@ int kup (el_listy *lista, int nr)
 	}
 }
 
-int edytuj(el_listy *lista, int nr, string nazwa, string kategoria, int cena, string opis)
+void edytuj(el_listy *lista, int nr, string nazwa, string kategoria, int cena, string opis)
 {
 	el_listy *wsk = lista;
 	while (wsk->next != NULL)
@@ -190,6 +203,7 @@ int edytuj(el_listy *lista, int nr, string nazwa, string kategoria, int cena, st
 			wsk->next->kategoria = kategoria;
 			wsk->next->cena = cena;
 			wsk->next->opis = opis;
+			wsk = wsk->next;
 		}
 		else
 		{
@@ -246,6 +260,7 @@ int main()
 	string status;
 	int cena;
 	string opis;
+	int id;
 
 	first = new el_listy;
 	first->nazwa = "Monitor Dell";
@@ -332,26 +347,16 @@ int main()
 				break;
 			case 2:
 				cout << "Podaj ID aukcji: ";
-				int id;
 				cin >> id;
-				if (kup(first, id) == 4)
-				{
-					system("CLS");
-					cout << "Nie mozna kupic przedmiotu, poniewaz ktos juz go kupil" << endl;
-				}
+				kup(first, id);
+				Sleep(3000);
 				zapisz_do_pliku(first);
 				break;
 			case 3: 
 				cout << "Jeszcze nie napisana" << endl;
 				break;
 			case 4:  
-				string nazwa;
-				string kategoria;
-				string status;
-				int cena;
-				string opis;
 				cout << "Podaj ID aukcji: ";
-				int id;
 				cin >> id;
 				cout << "Podaj nazwe ";
 				cin.clear();
