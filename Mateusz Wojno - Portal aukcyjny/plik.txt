@@ -46,11 +46,43 @@ Na sprzedaz
 Jan Kowalski
 Brak
 Saga Wiedzminska w unikalnej cenie.
-nazwa
-1637
-ada
-Sprzedane
-121
-Kazimierz Wielki
+Laptop Dell
+1736
+Laptopy
+Na sprzedaz
+3099
 Jan Kowalski
-ops
+Brak
+Laptop Dell Latitude 3500 najlepszy w swojej cenie.
+Krzeslo kuchenne
+1939
+Meble
+Na sprzedaz
+89
+Jan Kowalski
+Brak
+Unikalny wyglad i niesamowita wygoda w niskiej cenie.
+Meble kuchenne
+1471
+Meble
+Na sprzedaz
+5399
+Jan Kowalski
+Brak
+Zabudowa do srednich wymiarow kuchni.
+Audi A4 B7
+1657
+Samochody
+Na sprzedaz
+32000
+Jan Kowalski
+Brak
+Samochod z 2006 roku, zadbany.
+Intel i5 2500K
+1850
+Procesory
+Na sprzedaz
+899
+Jan Kowalski
+Brak
+Wydajny procesor w niskiej cenie.

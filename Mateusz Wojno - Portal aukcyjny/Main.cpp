@@ -140,7 +140,7 @@ void zapisz_do_pliku(el_listy *lista)
 	plik.close();
 }
 
-int usun_z_listy(el_listy *lista, int nr)
+void usun_z_listy(el_listy *lista, int nr)
 {
 	el_listy *wsk = lista;
 	while (wsk->next != NULL)
@@ -150,9 +150,15 @@ int usun_z_listy(el_listy *lista, int nr)
 			el_listy *usuwany = wsk->next;
 			wsk->next = usuwany->next;   /* przesuwam wsk aby omijal usuwany el */
 			delete(usuwany);
+			cout << "Usuwam..." << endl;
+			break;
 		}
 		else if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy != "Brak"))
-			return 4;
+		{
+			cout << "Nie mozna usunac przedmiotu, poniewaz ktos juz go kupil" << endl;
+			wsk = wsk->next;
+			break;
+		}
 		else
 		{
 			wsk = wsk->next;
@@ -210,6 +216,214 @@ void edytuj(el_listy *lista, int nr, string nazwa, string kategoria, int cena, s
 			wsk = wsk->next;
 		}
 	}
+}
+
+void sortowanie_cena()
+{
+	unsigned short int ilosc = 0;
+	for (el_listy * wsk = first; wsk; wsk = wsk->next) ++ilosc;
+	long int temp_cena;
+	string temp_mazwa;
+	long int temp_nr;
+	string temp_kategoria;
+	string temp_status;
+	string temp_wlasciciel;
+	string temp_kupujacy;
+	string temp_opis;
+	unsigned short int i, j;
+	if (ilosc) ilosc--;
+	for (i = 0; i < ilosc; i++)
+		for (el_listy * wsk = first; wsk->next; wsk = wsk->next)
+			if (wsk->cena < wsk->next->cena)
+			{
+				temp_cena = wsk->cena;
+				wsk->cena = wsk->next->cena;
+				wsk->next->cena = temp_cena;
+
+				temp_mazwa = wsk->nazwa;
+				wsk->nazwa = wsk->next->nazwa;
+				wsk->next->nazwa = temp_mazwa;
+
+				temp_nr = wsk->unikalny_nr;
+				wsk->unikalny_nr = wsk->next->unikalny_nr;
+				wsk->next->unikalny_nr = temp_nr;
+
+				temp_kategoria = wsk->kategoria;
+				wsk->kategoria = wsk->next->kategoria;
+				wsk->next->kategoria = temp_kategoria;
+
+				temp_status = wsk->status;
+				wsk->status = wsk->next->status;
+				wsk->next->status = temp_status;
+
+				temp_wlasciciel = wsk->wlasciciel;
+				wsk->wlasciciel = wsk->next->wlasciciel;
+				wsk->next->wlasciciel = temp_wlasciciel;
+
+				temp_kupujacy = wsk->kupujacy;
+				wsk->kupujacy = wsk->next->kupujacy;
+				wsk->next->kupujacy = temp_kupujacy;
+
+				temp_opis = wsk->opis;
+				wsk->opis = wsk->next->opis;
+				wsk->next->opis = temp_opis;
+			}	
+}
+
+void sortowanie_nazwy()
+{
+	unsigned short int ilosc = 0;
+	for (el_listy * wsk = first; wsk; wsk = wsk->next) ++ilosc;
+	long int temp_cena;
+	string temp_mazwa;
+	long int temp_nr;
+	string temp_kategoria;
+	string temp_status;
+	string temp_wlasciciel;
+	string temp_kupujacy;
+	string temp_opis;
+	unsigned short int i, j;
+	if (ilosc) ilosc--;
+	for (i = 0; i < ilosc; i++)
+		for (el_listy * wsk = first; wsk->next; wsk = wsk->next)
+			if (wsk->nazwa > wsk->next->nazwa)
+			{
+				temp_cena = wsk->cena;
+				wsk->cena = wsk->next->cena;
+				wsk->next->cena = temp_cena;
+
+				temp_mazwa = wsk->nazwa;
+				wsk->nazwa = wsk->next->nazwa;
+				wsk->next->nazwa = temp_mazwa;
+
+				temp_nr = wsk->unikalny_nr;
+				wsk->unikalny_nr = wsk->next->unikalny_nr;
+				wsk->next->unikalny_nr = temp_nr;
+
+				temp_kategoria = wsk->kategoria;
+				wsk->kategoria = wsk->next->kategoria;
+				wsk->next->kategoria = temp_kategoria;
+
+				temp_status = wsk->status;
+				wsk->status = wsk->next->status;
+				wsk->next->status = temp_status;
+
+				temp_wlasciciel = wsk->wlasciciel;
+				wsk->wlasciciel = wsk->next->wlasciciel;
+				wsk->next->wlasciciel = temp_wlasciciel;
+
+				temp_kupujacy = wsk->kupujacy;
+				wsk->kupujacy = wsk->next->kupujacy;
+				wsk->next->kupujacy = temp_kupujacy;
+
+				temp_opis = wsk->opis;
+				wsk->opis = wsk->next->opis;
+				wsk->next->opis = temp_opis;
+			}
+}
+
+void sortowanie_status()
+{
+	unsigned short int ilosc = 0;
+	for (el_listy * wsk = first; wsk; wsk = wsk->next) ++ilosc;
+	long int temp_cena;
+	string temp_mazwa;
+	long int temp_nr;
+	string temp_kategoria;
+	string temp_status;
+	string temp_wlasciciel;
+	string temp_kupujacy;
+	string temp_opis;
+	unsigned short int i, j;
+	if (ilosc) ilosc--;
+	for (i = 0; i < ilosc; i++)
+		for (el_listy * wsk = first; wsk->next; wsk = wsk->next)
+			if (wsk->status < wsk->next->status)
+			{
+				temp_cena = wsk->cena;
+				wsk->cena = wsk->next->cena;
+				wsk->next->cena = temp_cena;
+
+				temp_mazwa = wsk->nazwa;
+				wsk->nazwa = wsk->next->nazwa;
+				wsk->next->nazwa = temp_mazwa;
+
+				temp_nr = wsk->unikalny_nr;
+				wsk->unikalny_nr = wsk->next->unikalny_nr;
+				wsk->next->unikalny_nr = temp_nr;
+
+				temp_kategoria = wsk->kategoria;
+				wsk->kategoria = wsk->next->kategoria;
+				wsk->next->kategoria = temp_kategoria;
+
+				temp_status = wsk->status;
+				wsk->status = wsk->next->status;
+				wsk->next->status = temp_status;
+
+				temp_wlasciciel = wsk->wlasciciel;
+				wsk->wlasciciel = wsk->next->wlasciciel;
+				wsk->next->wlasciciel = temp_wlasciciel;
+
+				temp_kupujacy = wsk->kupujacy;
+				wsk->kupujacy = wsk->next->kupujacy;
+				wsk->next->kupujacy = temp_kupujacy;
+
+				temp_opis = wsk->opis;
+				wsk->opis = wsk->next->opis;
+				wsk->next->opis = temp_opis;
+			}
+}
+
+void sortowanie_kategoria()
+{
+	unsigned short int ilosc = 0;
+	for (el_listy * wsk = first; wsk; wsk = wsk->next) ++ilosc;
+	long int temp_cena;
+	string temp_mazwa;
+	long int temp_nr;
+	string temp_kategoria;
+	string temp_status;
+	string temp_wlasciciel;
+	string temp_kupujacy;
+	string temp_opis;
+	unsigned short int i, j;
+	if (ilosc) ilosc--;
+	for (i = 0; i < ilosc; i++)
+		for (el_listy * wsk = first; wsk->next; wsk = wsk->next)
+			if (wsk->kategoria > wsk->next->kategoria)
+			{
+				temp_cena = wsk->cena;
+				wsk->cena = wsk->next->cena;
+				wsk->next->cena = temp_cena;
+
+				temp_mazwa = wsk->nazwa;
+				wsk->nazwa = wsk->next->nazwa;
+				wsk->next->nazwa = temp_mazwa;
+
+				temp_nr = wsk->unikalny_nr;
+				wsk->unikalny_nr = wsk->next->unikalny_nr;
+				wsk->next->unikalny_nr = temp_nr;
+
+				temp_kategoria = wsk->kategoria;
+				wsk->kategoria = wsk->next->kategoria;
+				wsk->next->kategoria = temp_kategoria;
+
+				temp_status = wsk->status;
+				wsk->status = wsk->next->status;
+				wsk->next->status = temp_status;
+
+				temp_wlasciciel = wsk->wlasciciel;
+				wsk->wlasciciel = wsk->next->wlasciciel;
+				wsk->next->wlasciciel = temp_wlasciciel;
+
+				temp_kupujacy = wsk->kupujacy;
+				wsk->kupujacy = wsk->next->kupujacy;
+				wsk->next->kupujacy = temp_kupujacy;
+
+				temp_opis = wsk->opis;
+				wsk->opis = wsk->next->opis;
+				wsk->next->opis = temp_opis;
+			}
 }
 
 void wypisz_liste(el_listy *lista)
@@ -326,18 +540,15 @@ int main()
 			switch (wybor)
 			{
 			case 1:
-				system("CLS");
-				//logo();
-
-				cout << "Podaj nazwe ";
+				cout << "Podaj nazwe: ";
 				cin.clear();
 				cin.ignore();
 				getline(cin, nazwa);
-				cout << "Podaj kateorie ";
+				cout << "Podaj kateorie: ";
 				getline(cin, kategoria);
-				cout << "Podaj cene ";
+				cout << "Podaj cene: ";
 				cin >> cena;
-				cout << "Podaj opis ";
+				cout << "Podaj opis: ";
 				cin.clear();
 				cin.ignore();
 				getline(cin, opis);
@@ -353,20 +564,20 @@ int main()
 				zapisz_do_pliku(first);
 				break;
 			case 3: 
-				cout << "Jeszcze nie napisana" << endl;
+				sortowanie_kategoria();
 				break;
 			case 4:  
 				cout << "Podaj ID aukcji: ";
 				cin >> id;
-				cout << "Podaj nazwe ";
+				cout << "Podaj nazwe: ";
 				cin.clear();
 				cin.ignore();
 				getline(cin, nazwa);
-				cout << "Podaj kateorie ";
+				cout << "Podaj kateorie: ";
 				getline(cin, kategoria);
-				cout << "Podaj cene ";
+				cout << "Podaj cene: ";
 				cin >> cena;
-				cout << "Podaj opis ";
+				cout << "Podaj opis: ";
 				cin.clear();
 				cin.ignore();
 				getline(cin, opis);
@@ -377,11 +588,8 @@ int main()
 			case 5:
 				cout << "Podaj ID aukcji ktora chcesz usuanac: ";
 				cin >> id;
-				if (usun_z_listy(first, id) == 4)
-				{
-					system("CLS");
-					cout << "Nie mozna usunac aukcji, poniewaz ktos juz kupil na niej przedmiot" << endl;
-				}
+				usun_z_listy(first, id);
+				Sleep(3000);
 				zapisz_do_pliku(first);
 				break;
 			case 6: exit(0); break;
