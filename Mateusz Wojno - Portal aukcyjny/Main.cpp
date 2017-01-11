@@ -8,8 +8,8 @@
 #include <windows.h>
 using namespace std;
 
-typedef struct element {
-	struct element *next;
+typedef struct aukcje {
+	struct aukcje *next;
 	string nazwa;
 	int unikalny_nr;
 	string kategoria;
@@ -21,6 +21,18 @@ typedef struct element {
 } el_listy;
 
 el_listy *first;
+
+typedef struct klienci {
+	struct klienci *nextt;
+	string imie;
+	string nazwisko;
+	long int kwota_zakupow;
+	long int kwota_sprzedanych;
+	string kupione;
+	string wystawione;
+} el_klientow;
+
+el_klientow *firstt;
 
 void dodaj(el_listy *lista, int i, string tab[], int size)
 {
@@ -452,6 +464,31 @@ void wypisz_liste(el_listy *lista)
 	}
 }
 
+int znajdz(el_listy *lista)
+{
+	cout << "Podaj nazwe aukcji ktora chesz wyszukac" << endl;
+	string nazwa;
+	cin >> nazwa;
+	el_listy *wsk = lista;
+	while (wsk->next != NULL)
+	{
+		size_t pozycja = wsk->nazwa.find(nazwa);
+		if (pozycja == string::npos)
+			return 0;
+		else
+		{
+			cout << wsk->nazwa << endl;
+			pozycja = wsk->nazwa.find(nazwa, pozycja + nazwa.size());
+			cout << pozycja;
+			wsk = wsk->next;
+		}
+
+		wsk = wsk->next;
+	}
+	
+}
+
+
 void logo()
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
@@ -465,6 +502,328 @@ void logo()
 	cout.width(100);
 	cout << "============================" << endl << endl;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+}
+
+
+/*void klienci_dane(el_listy *lista, string tab[], int size, int i)
+{
+	int kwota_sprzedanych = 0;
+	el_listy *wsk = lista;
+	while (wsk->next != NULL)
+	{
+		if ((wsk->next->wlasciciel == (tab[i] + tab[i + 1])) && (wsk->next->status == "Sprzedane"))
+		{
+			nowy->kwota_sprzedanych = wsk->next->cena + kwota_sprzedanych;
+			wsk = wsk->next;
+		}
+		else
+		{
+			wsk = wsk->next;
+		}
+		i++;
+	}
+
+}*/
+
+void dodaj_klienci(el_klientow *lista, int i, string tab[], int size, el_listy *list)
+{
+	el_klientow *wsk, *nowy;
+	wsk = lista;
+	while (wsk->nextt != NULL)
+	{
+		wsk = wsk->nextt; /*znajaduje ostatni el listy*/
+	}
+
+
+	nowy = new el_klientow;
+	nowy->imie = tab[i];
+	i++;
+	nowy->nazwisko = tab[i];
+	el_listy *wskk = list;
+	long int kwota_zakupow = 0;
+	while (wskk->next != NULL)
+	{
+		if ((wskk->next->kupujacy == (tab[i-1] + tab[i])))
+		{
+			kwota_zakupow += wskk->next->cena;
+			wskk = wskk->next;
+		}
+		else
+		{
+			wskk = wskk->next;
+
+		}
+		
+	}
+	nowy->kwota_zakupow = kwota_zakupow;
+	i++;
+	nowy->kwota_sprzedanych = 111111211;
+
+	nowy->kupione = "a";
+
+	nowy->wystawione = "b";
+
+
+	nowy->nextt = NULL;
+	wsk->nextt = nowy;	/*podczepiam wsk po ten element*/
+}
+
+void dodaj_do_listy_z_pliku_klienci(el_klientow *lista)
+{
+	fstream klienci;
+	klienci.open("klienci.txt", ios::in);
+	int size = 0;
+	while (!klienci.eof())
+	{
+		string l;
+		getline(klienci, l);
+		size++;
+	}
+	klienci.close();
+	string *tab = new string[size];
+	klienci.open("klienci.txt", ios::in);
+	for (int i = 0; i < size; i++)
+	{
+		string line;
+		getline(klienci, line);
+		tab[i] = line;
+	}
+	klienci.close();
+	int i = 0;
+	while (i < size)
+	{
+		dodaj_klienci(firstt, i, tab, size, first);
+		i = i + 2;
+	}
+	delete[] tab;
+}
+
+void dodaj_do_listy_klienci(el_klientow *lista, string imie, string nazwisko, int kwota_zakupu, int kwota_sprzedanych)
+{
+	el_klientow *wsk, *nowy;
+	wsk = lista;
+	while (wsk->nextt != NULL)
+	{
+		wsk = wsk->nextt; /*znajaduje ostatni el listy*/
+	}
+	nowy = new el_klientow;
+	nowy->imie = imie;
+	nowy->nazwisko = nazwisko;
+	nowy->kwota_zakupow = kwota_zakupu;
+	nowy->kwota_sprzedanych = kwota_sprzedanych;
+	nowy->nextt = NULL;
+	wsk->nextt = nowy; /*podczepiam wsk po ten element*/
+}
+
+void zapisz_do_pliku_klienci(el_klientow *lista)
+{
+	el_klientow *wsk = lista;
+	fstream klienci;
+	klienci.open("klienci.txt", ios::trunc | ios::out);
+	int i = 0;
+	while (wsk->nextt != NULL)
+	{
+		if (i == 0)
+		{
+			klienci << wsk->nextt->imie << endl;
+			klienci << wsk->nextt->nazwisko << endl;
+		}
+		else
+		{
+			klienci << endl;
+			klienci << wsk->nextt->imie << endl;
+			klienci << wsk->nextt->nazwisko << endl;
+		}
+		wsk = wsk->nextt;
+		i++;
+	}
+	klienci.close();
+}
+
+void usun_z_listy_klienci(el_klientow *lista, string imie, string nazwisko)
+{
+	el_klientow *wsk = lista;
+	while (wsk->nextt != NULL)
+	{
+		if ((wsk->nextt->imie == imie) && (wsk->nextt->nazwisko == nazwisko))
+		{
+			el_klientow *usuwany = wsk->nextt;
+			wsk->nextt = usuwany->nextt;   /* przesuwam wsk aby omijal usuwany el */
+			delete(usuwany);
+			cout << "Usuwam..." << endl;
+			break;
+		}
+		else
+		{
+			wsk = wsk->nextt;
+		}
+	}
+}
+
+void edytuj_klienci(el_klientow *lista, string imie, string nazwisko, string nowe_imie, string nowe_nazwisko)
+{
+	el_klientow *wsk = lista;
+	while (wsk->nextt != NULL)
+	{
+		if ((wsk->nextt->imie == imie)&&(wsk->nextt->nazwisko == nazwisko))
+		{
+			wsk->nextt->imie = nowe_imie;
+			wsk->nextt->nazwisko = nowe_nazwisko;
+			wsk = wsk->nextt;
+		}
+		else
+		{
+			wsk = wsk->nextt;
+		}
+	}
+}
+
+void sortowanie_kupione_klienci()
+{
+	unsigned short int ilosc = 0;
+	for (el_klientow * wsk = firstt; wsk; wsk = wsk->nextt) ++ilosc;
+	long int temp_kwota_zakupow;
+	string temp_imie;
+	long int temp_kwota_sprzedanych;
+	string temp_nazwisko;
+	string temp_kupione;
+	string temp_wystawione;
+	unsigned short int i, j;
+	if (ilosc) ilosc--;
+	for (i = 0; i < ilosc; i++)
+		for (el_klientow * wsk = firstt; wsk->nextt; wsk = wsk->nextt)
+			if (wsk->kwota_zakupow < wsk->nextt->kwota_zakupow)
+			{
+				temp_kwota_zakupow = wsk->kwota_zakupow;
+				wsk->kwota_zakupow = wsk->nextt->kwota_zakupow;
+				wsk->nextt->kwota_zakupow = temp_kwota_zakupow;
+
+				temp_imie = wsk->imie;
+				wsk->imie = wsk->nextt->imie;
+				wsk->nextt->imie = temp_imie;
+
+				temp_kwota_sprzedanych = wsk->kwota_sprzedanych;
+				wsk->kwota_sprzedanych = wsk->nextt->kwota_sprzedanych;
+				wsk->nextt->kwota_sprzedanych = temp_kwota_sprzedanych;
+
+				temp_nazwisko = wsk->nazwisko;
+				wsk->nazwisko = wsk->nextt->nazwisko;
+				wsk->nextt->nazwisko = temp_nazwisko;
+
+				temp_kupione = wsk->kupione;
+				wsk->kupione = wsk->nextt->kupione;
+				wsk->nextt->kupione = temp_kupione;
+
+				temp_wystawione = wsk->wystawione;
+				wsk->wystawione = wsk->nextt->wystawione;
+				wsk->nextt->wystawione = temp_wystawione;
+			}
+}
+
+void sortowanie_sprzedane_klienci()
+{
+	unsigned short int ilosc = 0;
+	for (el_klientow * wsk = firstt; wsk; wsk = wsk->nextt) ++ilosc;
+	long int temp_kwota_zakupow;
+	string temp_imie;
+	long int temp_kwota_sprzedanych;
+	string temp_nazwisko;
+	string temp_kupione;
+	string temp_wystawione;
+	unsigned short int i, j;
+	if (ilosc) ilosc--;
+	for (i = 0; i < ilosc; i++)
+		for (el_klientow * wsk = firstt; wsk->nextt; wsk = wsk->nextt)
+			if (wsk->kwota_sprzedanych < wsk->nextt->kwota_sprzedanych)
+			{
+				temp_kwota_zakupow = wsk->kwota_zakupow;
+				wsk->kwota_zakupow = wsk->nextt->kwota_zakupow;
+				wsk->nextt->kwota_zakupow = temp_kwota_zakupow;
+
+				temp_imie = wsk->imie;
+				wsk->imie = wsk->nextt->imie;
+				wsk->nextt->imie = temp_imie;
+
+				temp_kwota_sprzedanych = wsk->kwota_sprzedanych;
+				wsk->kwota_sprzedanych = wsk->nextt->kwota_sprzedanych;
+				wsk->nextt->kwota_sprzedanych = temp_kwota_sprzedanych;
+
+				temp_nazwisko = wsk->nazwisko;
+				wsk->nazwisko = wsk->nextt->nazwisko;
+				wsk->nextt->nazwisko = temp_nazwisko;
+
+				temp_kupione = wsk->kupione;
+				wsk->kupione = wsk->nextt->kupione;
+				wsk->nextt->kupione = temp_kupione;
+
+				temp_wystawione = wsk->wystawione;
+				wsk->wystawione = wsk->nextt->wystawione;
+				wsk->nextt->wystawione = temp_wystawione;
+			}
+}
+
+void sortowanie_nazwiska_klienci()
+{
+	unsigned short int ilosc = 0;
+	for (el_klientow * wsk = firstt; wsk; wsk = wsk->nextt) ++ilosc;
+	long int temp_kwota_zakupow;
+	string temp_imie;
+	long int temp_kwota_sprzedanych;
+	string temp_nazwisko;
+	string temp_kupione;
+	string temp_wystawione;
+	unsigned short int i, j;
+	if (ilosc) ilosc--;
+	for (i = 0; i < ilosc; i++)
+		for (el_klientow * wsk = firstt; wsk->nextt; wsk = wsk->nextt)
+			if (wsk->imie < wsk->nextt->imie)
+			{
+				temp_kwota_zakupow = wsk->kwota_zakupow;
+				wsk->kwota_zakupow = wsk->nextt->kwota_zakupow;
+				wsk->nextt->kwota_zakupow = temp_kwota_zakupow;
+
+				temp_imie = wsk->imie;
+				wsk->imie = wsk->nextt->imie;
+				wsk->nextt->imie = temp_imie;
+
+				temp_kwota_sprzedanych = wsk->kwota_sprzedanych;
+				wsk->kwota_sprzedanych = wsk->nextt->kwota_sprzedanych;
+				wsk->nextt->kwota_sprzedanych = temp_kwota_sprzedanych;
+
+				temp_nazwisko = wsk->nazwisko;
+				wsk->nazwisko = wsk->nextt->nazwisko;
+				wsk->nextt->nazwisko = temp_nazwisko;
+
+				temp_kupione = wsk->kupione;
+				wsk->kupione = wsk->nextt->kupione;
+				wsk->nextt->kupione = temp_kupione;
+
+				temp_wystawione = wsk->wystawione;
+				wsk->wystawione = wsk->nextt->wystawione;
+				wsk->nextt->wystawione = temp_wystawione;
+			}
+}
+
+void wypisz_klientow(el_klientow *lista)
+{
+	el_klientow *wsk = lista;
+	while (wsk != NULL)
+	{
+		cout << left;
+		cout.width(23);
+		cout << wsk->imie;
+		cout.width(10);
+		cout << wsk->nazwisko;
+		cout.width(20);
+		cout << wsk->kwota_zakupow;
+		cout.width(15);
+		cout << wsk->kwota_sprzedanych;
+		cout.width(10);
+		cout << wsk->kupione;
+		cout.width(25);
+		cout << wsk->wystawione << endl;
+		wsk = wsk->nextt;
+	}
 }
 
 int main()
@@ -486,6 +845,11 @@ int main()
 	first->kupujacy = "Brak";
 	first->opis = "Monitor nowy w promocyjnej cenie";
 	first->next = NULL;
+
+	firstt = new el_klientow;
+	firstt->imie = "Mariusz";
+	firstt->nazwisko = "Brzozowski";
+	firstt->nextt = NULL;
 
 	logo();
 
@@ -530,17 +894,21 @@ int main()
 			cout << endl << "MENU WYBORU" << endl;
 			cout << "1. Wystaw przedmiot na sprzedaz" << endl;
 			cout << "2. Kup przedmiot" << endl;
-			cout << "3. Filtruj aukcje" << endl;
-			cout << "4. Edytuj aukcje" << endl;
-			cout << "5. Usun aukcje" << endl;
-			cout << "6. Wyjscie z programu" << endl;
+			cout << "3. Sortuj aukcje wedlug nazwy" << endl;
+			cout << "4. Sortuj aukcje wedlug kategorii" << endl;
+			cout << "5. Sortuj aukcje wedlug statusu" << endl;
+			cout << "6. Sortuj aukcje wedlug ceny" << endl;
+			cout << "7. Wyszukaj aukcje wedlug jej nazwy" << endl;
+			cout << "8. Edytuj aukcje" << endl;
+			cout << "9. Usun aukcje" << endl;
+			cout << "10. Wyjscie z programu" << endl;
 			cout << "Twoj wybor: ";
 			cin >> wybor;
 
 			switch (wybor)
 			{
 			case 1:
-				cout << "Podaj nazwe: ";
+				cout << "Podaj nazwe aukcji ktora chcesz dodac: ";
 				cin.clear();
 				cin.ignore();
 				getline(cin, nazwa);
@@ -557,17 +925,34 @@ int main()
 				zapisz_do_pliku(first);
 				break;
 			case 2:
-				cout << "Podaj ID aukcji: ";
+				cout << "Podaj ID aukcji ktora chcesz kupic: ";
 				cin >> id;
 				kup(first, id);
 				Sleep(3000);
 				zapisz_do_pliku(first);
 				break;
 			case 3: 
-				sortowanie_kategoria();
+				sortowanie_nazwy();
+				zapisz_do_pliku(first);
 				break;
-			case 4:  
-				cout << "Podaj ID aukcji: ";
+			case 4:
+				sortowanie_kategoria();
+				zapisz_do_pliku(first);
+				break;
+			case 5:
+				sortowanie_status();
+				zapisz_do_pliku(first);
+				break;
+			case 6:
+				sortowanie_cena();
+				zapisz_do_pliku(first);
+				break;
+			case 7:
+				znajdz(first);
+				Sleep(9000);
+				break;
+			case 8:  
+				cout << "Podaj ID aukcji ktora chcesz edytowac: ";
 				cin >> id;
 				cout << "Podaj nazwe: ";
 				cin.clear();
@@ -585,20 +970,21 @@ int main()
 				edytuj(first, id, nazwa, kategoria, cena, opis);
 				zapisz_do_pliku(first);
 				break;
-			case 5:
+			case 9:
 				cout << "Podaj ID aukcji ktora chcesz usuanac: ";
 				cin >> id;
 				usun_z_listy(first, id);
 				Sleep(3000);
 				zapisz_do_pliku(first);
 				break;
-			case 6: exit(0); break;
+			case 10: exit(0); break;
 			}
 		} while (true);
 	}
 	else if (wybor == 2)
 	{
-		cout << "Jeszcze nie napisana" << endl;
+		dodaj_do_listy_z_pliku_klienci(firstt);
+		wypisz_klientow(firstt);
 	}
 
 	else if (wybor == 3)
