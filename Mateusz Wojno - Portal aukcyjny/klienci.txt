@@ -1,8 +1,24 @@
 Jan
 Kowalski
+62999
+740
+Audi A4 B8,
+Monitor Dell, Rower, Glosniki, Karta Graficzna, Saga Ksiazek, Laptop Dell, Meble Kuchenne, Audi A4 B7, Intel i5 2500k 
 Miroslaw
 Kwasniewski
+740
+62999
+Monitor Dell
+Audi A4 B8
 Przemyslwa
 Wisniewski
+0
+1200
+Brak
+Intel i5 6600K
 Janusz
 Mazurski
+1200
+89
+Intel i6 6600K
+Krzeslo Kuchenne

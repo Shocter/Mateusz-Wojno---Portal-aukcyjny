@@ -26,8 +26,8 @@ typedef struct klienci {
 	struct klienci *nextt;
 	string imie;
 	string nazwisko;
-	long int kwota_zakupow;
-	long int kwota_sprzedanych;
+	int kwota_zakupow;
+	int kwota_sprzedanych;
 	string kupione;
 	string wystawione;
 } el_klientow;
@@ -525,7 +525,7 @@ void logo()
 
 }*/
 
-void dodaj_klienci(el_klientow *lista, int i, string tab[], int size, el_listy *list)
+void dodaj_klienci(el_klientow *lista, int i, string tab[], int size)
 {
 	el_klientow *wsk, *nowy;
 	wsk = lista;
@@ -534,34 +534,18 @@ void dodaj_klienci(el_klientow *lista, int i, string tab[], int size, el_listy *
 		wsk = wsk->nextt; /*znajaduje ostatni el listy*/
 	}
 
-
 	nowy = new el_klientow;
 	nowy->imie = tab[i];
 	i++;
 	nowy->nazwisko = tab[i];
-	el_listy *wskk = list;
-	long int kwota_zakupow = 0;
-	while (wskk->next != NULL)
-	{
-		if ((wskk->next->kupujacy == (tab[i-1] + tab[i])))
-		{
-			kwota_zakupow += wskk->next->cena;
-			wskk = wskk->next;
-		}
-		else
-		{
-			wskk = wskk->next;
-
-		}
-		
-	}
-	nowy->kwota_zakupow = kwota_zakupow;
 	i++;
-	nowy->kwota_sprzedanych = 111111211;
-
-	nowy->kupione = "a";
-
-	nowy->wystawione = "b";
+	nowy->kwota_zakupow = stoi(tab[i]);
+	i++;
+	nowy->kwota_sprzedanych = stoi(tab[i]);
+	i++;
+	nowy->kupione = tab[i];
+	i++;
+	nowy->wystawione = tab[i];
 
 
 	nowy->nextt = NULL;
@@ -592,8 +576,8 @@ void dodaj_do_listy_z_pliku_klienci(el_klientow *lista)
 	int i = 0;
 	while (i < size)
 	{
-		dodaj_klienci(firstt, i, tab, size, first);
-		i = i + 2;
+		dodaj_klienci(firstt, i, tab, size);
+		i = i + 6;
 	}
 	delete[] tab;
 }
@@ -812,15 +796,15 @@ void wypisz_klientow(el_klientow *lista)
 		cout << left;
 		cout.width(23);
 		cout << wsk->imie;
-		cout.width(10);
-		cout << wsk->nazwisko;
-		cout.width(20);
-		cout << wsk->kwota_zakupow;
-		cout.width(15);
-		cout << wsk->kwota_sprzedanych;
-		cout.width(10);
-		cout << wsk->kupione;
 		cout.width(25);
+		cout << wsk->nazwisko;
+		cout.width(30);
+		cout << wsk->kwota_zakupow;
+		cout.width(30);
+		cout << wsk->kwota_sprzedanych;
+		cout.width(30);
+		cout << wsk->kupione;
+		cout.width(30);
 		cout << wsk->wystawione << endl;
 		wsk = wsk->nextt;
 	}
@@ -834,21 +818,29 @@ int main()
 	int cena;
 	string opis;
 	int id;
+	string imie;
+	string nazwisko;
+	string nowe_imie;
+	string nowe_nazwisko;
 
 	first = new el_listy;
 	first->nazwa = "Monitor Dell";
 	first->unikalny_nr = 1011;
 	first->kategoria = "Monitory";
-	first->status = "Na sprzedaz";
+	first->status = "Sprzedane";
 	first->cena = 740;
-	first->wlasciciel = "Mariusz Brzozowski";
-	first->kupujacy = "Brak";
+	first->wlasciciel = "Jan Kowalski";
+	first->kupujacy = "Miroslaw Kwasniewski";
 	first->opis = "Monitor nowy w promocyjnej cenie";
 	first->next = NULL;
 
 	firstt = new el_klientow;
 	firstt->imie = "Mariusz";
 	firstt->nazwisko = "Brzozowski";
+	firstt->kwota_zakupow = 0;
+	firstt->kwota_sprzedanych = 0;
+	firstt->kupione = "as";
+	firstt->wystawione = "dsa";
 	firstt->nextt = NULL;
 
 	logo();
@@ -984,7 +976,92 @@ int main()
 	else if (wybor == 2)
 	{
 		dodaj_do_listy_z_pliku_klienci(firstt);
-		wypisz_klientow(firstt);
+		do
+		{
+			system("CLS");
+
+			logo();
+
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+			cout << left;
+			cout.width(23);
+			cout << "Imie";
+			cout.width(25);
+			cout << "Nazwisko";
+			cout.width(30);
+			cout << "Kwota zakupow";
+			cout.width(30);
+			cout << "Kwota sprzedanych";
+			cout.width(30);
+			cout << "Kupione przedmioty";
+			cout.width(30);
+			cout << "Wystawione przedmioty" << endl;
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+			wypisz_klientow(firstt);
+
+			cout << endl << "MENU WYBORU" << endl;
+			cout << "1. Dodaj klienta" << endl;
+			cout << "2. Usun klienta" << endl;
+			cout << "3. Edytuj klienta" << endl;
+			cout << "4. Wyszukaj wed³ug nazwiska" << endl;
+			cout << "5. Sortuj klientow wedlug nazwiska" << endl;
+			cout << "6. Sortuj kielntow wedlug kwoty zakupow" << endl;
+			cout << "7. Sortuj kilentow wedlug kwoty sprzedanych" << endl;
+			cout << "8. Wyjscie z programu" << endl;
+			cout << "Twoj wybor: ";
+			cin >> wybor;
+
+			switch (wybor)
+			{
+			case 1:
+				cout << "Podaj imie klienta ktorego chcesz dodac: " << endl;
+				cin >> imie;
+				cout << "Podaj nazwisko: " << endl;
+				cin >> nazwisko;
+
+				dodaj_do_listy(first, nazwa, kategoria, cena, opis);
+				zapisz_do_pliku_klienci(firstt);
+				break;
+			case 2:
+				cout << "Podaj imie kilienta ktorego chcesz usuanac: " << endl;
+				cin >> imie;
+				cout << "Podaj nazwisko" << endl;
+				cin >> nazwisko;
+
+				zapisz_do_pliku_klienci(firstt);
+				break;
+			case 3:
+				cout << "Podaj imie klienta ktorego chcesz edytowac" << endl;
+				cin >> imie;
+				cout << "Podaj nazwisko" << endl;
+				cin >> nazwisko;
+				cout << "Podaj nowe imie" << endl;
+				cin >> nowe_imie;
+				cout << "Podaj nowe nazwisko" << endl;
+				cin >> nowe_nazwisko;
+
+				edytuj_klienci(firstt, imie, nazwisko, nowe_imie, nowe_nazwisko);
+				zapisz_do_pliku_klienci(firstt);
+				break;
+			case 4:
+				cout << "Brak";
+				break;
+			case 5:
+				sortowanie_nazwiska_klienci();
+				zapisz_do_pliku_klienci(firstt);
+				break;
+			case 6:
+				sortowanie_kupione_klienci();
+				zapisz_do_pliku_klienci(firstt);
+				break;
+			case 7:
+				sortowanie_sprzedane_klienci();
+				zapisz_do_pliku_klienci(firstt);
+				break;
+			case 8: exit(0); break;
+			}
+		} while (true);
 	}
 
 	else if (wybor == 3)
