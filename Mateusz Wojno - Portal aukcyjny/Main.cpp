@@ -93,11 +93,13 @@ void dodaj_do_listy_z_pliku(el_listy *lista)
 	delete[] tab;
 }
 
-void dodaj_do_listy(el_listy *lista, string nazwa, string kategoria, int cena, string opis)
+void dodaj_do_listy(el_listy *lista, el_klientow *listaa, string nazwa, string kategoria, int cena, string opis)
 {
 	srand(time(NULL));
 	el_listy *wsk, *nowy;
+	el_klientow *wskk;
 	wsk = lista;
+	wskk = listaa;
 	while (wsk->next != NULL)
 	{
 		wsk = wsk->next; /*znajaduje ostatni el listy*/
@@ -113,6 +115,17 @@ void dodaj_do_listy(el_listy *lista, string nazwa, string kategoria, int cena, s
 	nowy->opis = opis;
 	nowy->next = NULL;
 	wsk->next = nowy; /*podczepiam wsk po ten element*/
+	while (wskk->nextt != NULL)
+	{
+		if ((wskk->nextt->imie == "Jan") && (wskk->nextt->nazwisko == "Kowalski"))
+		{
+			string wystawione;
+			wystawione = wskk->nextt->wystawione;
+			wskk->nextt->wystawione = wystawione.insert(kupione.length(), ", ");
+			wskk->nextt->wystawione = wystawione.insert(kupione.length(), nazwa);
+			wskk = wskk->nextt;
+		}
+		break;
 }
 
 void zapisz_do_pliku(el_listy *lista)
@@ -178,17 +191,35 @@ void usun_z_listy(el_listy *lista, int nr)
 	}
 }
 
-void kup (el_listy *lista, int nr)
+void kup (el_listy *lista, int nr, el_klientow *listaa)
 {
 	el_listy *wsk = lista;
+	el_klientow *wskk = listaa;
 	while (wsk->next != NULL)
 	{
 		if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy == "Brak") && (wsk->next->wlasciciel != "Jan Kowalski"))
 		{
+			int cena;
+			string nazwa;
 			wsk->next->kupujacy = "Jan Kowalski";
 			wsk->next->status = "Sprzedane";
+			cena = wsk->next->cena;
+			nazwa = wsk->next->nazwa;
 			cout << "Kupuje..." << endl;
 			wsk = wsk->next;
+			while (wskk->nextt != NULL)
+			{
+				if ((wskk->nextt->imie == "Jan") && (wskk->nextt->nazwisko == "Kowalski"))
+				{
+					wskk->nextt->kwota_zakupow += cena;
+					string kupione;
+					kupione = wskk->nextt->kupione;
+					wskk->nextt->kupione = kupione.insert(kupione.length(), ", ");
+					wskk->nextt->kupione = kupione.insert(kupione.length(), nazwa);
+					wskk = wskk->nextt;
+				}
+				break;
+			}
 			break;
 		}
 		else if ((wsk->next->unikalny_nr == nr) && (wsk->next->kupujacy != "Brak"))
@@ -869,6 +900,7 @@ int main()
 	if (wybor == 1)
 	{
 		dodaj_do_listy_z_pliku(first);
+		dodaj_do_listy_z_pliku_klienci(firstt);
 		do
 		{
 			system("CLS");
@@ -927,15 +959,20 @@ int main()
 				cin.ignore();
 				getline(cin, opis);
 
-				dodaj_do_listy(first, nazwa, kategoria, cena, opis);
+				dodaj_do_listy(first, firstt, nazwa, kategoria, cena, opis);
 				zapisz_do_pliku(first);
+				zapisz_do_pliku_klienci(firstt);
 				break;
 			case 2:
 				cout << "Podaj ID aukcji ktora chcesz kupic: ";
 				cin >> id;
-				kup(first, id);
+				kup(first, id, firstt);
 				Sleep(3000);
 				zapisz_do_pliku(first);
+				zapisz_do_pliku_klienci(firstt);
+				//wypisz_klientow(firstt);
+				//Sleep(9000);
+
 				break;
 			case 3: 
 				sortowanie_nazwy();
