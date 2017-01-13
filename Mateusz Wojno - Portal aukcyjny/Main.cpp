@@ -582,7 +582,7 @@ void dodaj_do_listy_z_pliku_klienci(el_klientow *lista)
 	delete[] tab;
 }
 
-void dodaj_do_listy_klienci(el_klientow *lista, string imie, string nazwisko, int kwota_zakupu, int kwota_sprzedanych)
+void dodaj_do_listy_klienci(el_klientow *lista, string imie, string nazwisko)
 {
 	el_klientow *wsk, *nowy;
 	wsk = lista;
@@ -593,8 +593,10 @@ void dodaj_do_listy_klienci(el_klientow *lista, string imie, string nazwisko, in
 	nowy = new el_klientow;
 	nowy->imie = imie;
 	nowy->nazwisko = nazwisko;
-	nowy->kwota_zakupow = kwota_zakupu;
-	nowy->kwota_sprzedanych = kwota_sprzedanych;
+	nowy->kwota_zakupow = 0;
+	nowy->kwota_sprzedanych = 0;
+	nowy->kupione = "Brak";
+	nowy->wystawione = "Brak";
 	nowy->nextt = NULL;
 	wsk->nextt = nowy; /*podczepiam wsk po ten element*/
 }
@@ -611,12 +613,20 @@ void zapisz_do_pliku_klienci(el_klientow *lista)
 		{
 			klienci << wsk->nextt->imie << endl;
 			klienci << wsk->nextt->nazwisko << endl;
+			klienci << wsk->nextt->kwota_zakupow << endl;
+			klienci << wsk->nextt->kwota_sprzedanych << endl;
+			klienci << wsk->nextt->kupione << endl;
+			klienci << wsk->nextt->wystawione;
 		}
 		else
 		{
 			klienci << endl;
 			klienci << wsk->nextt->imie << endl;
 			klienci << wsk->nextt->nazwisko << endl;
+			klienci << wsk->nextt->kwota_zakupow << endl;
+			klienci << wsk->nextt->kwota_sprzedanych << endl;
+			klienci << wsk->nextt->kupione << endl;
+			klienci << wsk->nextt->wystawione;
 		}
 		wsk = wsk->nextt;
 		i++;
@@ -760,7 +770,7 @@ void sortowanie_nazwiska_klienci()
 	if (ilosc) ilosc--;
 	for (i = 0; i < ilosc; i++)
 		for (el_klientow * wsk = firstt; wsk->nextt; wsk = wsk->nextt)
-			if (wsk->imie < wsk->nextt->imie)
+			if (wsk->imie > wsk->nextt->imie)
 			{
 				temp_kwota_zakupow = wsk->kwota_zakupow;
 				wsk->kwota_zakupow = wsk->nextt->kwota_zakupow;
@@ -839,10 +849,14 @@ int main()
 	firstt->nazwisko = "Brzozowski";
 	firstt->kwota_zakupow = 0;
 	firstt->kwota_sprzedanych = 0;
-	firstt->kupione = "as";
-	firstt->wystawione = "dsa";
+	firstt->kupione = "Brak";
+	firstt->wystawione = "Brak";
 	firstt->nextt = NULL;
 
+	logo();
+	cout << "Pomyslnie zalogowano na konto Jan Kowalski..." << endl;
+	Sleep(2500);
+	system("CLS");
 	logo();
 
 	cout << "MENU WYBORU" << endl;
@@ -925,19 +939,15 @@ int main()
 				break;
 			case 3: 
 				sortowanie_nazwy();
-				zapisz_do_pliku(first);
 				break;
 			case 4:
 				sortowanie_kategoria();
-				zapisz_do_pliku(first);
 				break;
 			case 5:
 				sortowanie_status();
-				zapisz_do_pliku(first);
 				break;
 			case 6:
 				sortowanie_cena();
-				zapisz_do_pliku(first);
 				break;
 			case 7:
 				znajdz(first);
@@ -1004,7 +1014,7 @@ int main()
 			cout << "1. Dodaj klienta" << endl;
 			cout << "2. Usun klienta" << endl;
 			cout << "3. Edytuj klienta" << endl;
-			cout << "4. Wyszukaj wed³ug nazwiska" << endl;
+			cout << "4. Wyszukaj wedlug nazwiska" << endl;
 			cout << "5. Sortuj klientow wedlug nazwiska" << endl;
 			cout << "6. Sortuj kielntow wedlug kwoty zakupow" << endl;
 			cout << "7. Sortuj kilentow wedlug kwoty sprzedanych" << endl;
@@ -1020,7 +1030,7 @@ int main()
 				cout << "Podaj nazwisko: " << endl;
 				cin >> nazwisko;
 
-				dodaj_do_listy(first, nazwa, kategoria, cena, opis);
+				dodaj_do_listy_klienci(firstt, imie, nazwisko);
 				zapisz_do_pliku_klienci(firstt);
 				break;
 			case 2:
@@ -1029,6 +1039,7 @@ int main()
 				cout << "Podaj nazwisko" << endl;
 				cin >> nazwisko;
 
+				usun_z_listy_klienci(firstt, imie, nazwisko);
 				zapisz_do_pliku_klienci(firstt);
 				break;
 			case 3:
@@ -1049,15 +1060,12 @@ int main()
 				break;
 			case 5:
 				sortowanie_nazwiska_klienci();
-				zapisz_do_pliku_klienci(firstt);
 				break;
 			case 6:
 				sortowanie_kupione_klienci();
-				zapisz_do_pliku_klienci(firstt);
 				break;
 			case 7:
 				sortowanie_sprzedane_klienci();
-				zapisz_do_pliku_klienci(firstt);
 				break;
 			case 8: exit(0); break;
 			}
