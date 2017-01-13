@@ -93,13 +93,11 @@ void dodaj_do_listy_z_pliku(el_listy *lista)
 	delete[] tab;
 }
 
-void dodaj_do_listy(el_listy *lista, el_klientow *listaa, string nazwa, string kategoria, int cena, string opis)
+void dodaj_do_listy(el_listy *lista, string nazwa, string kategoria, int cena, string opis)
 {
 	srand(time(NULL));
 	el_listy *wsk, *nowy;
-	el_klientow *wskk;
 	wsk = lista;
-	wskk = listaa;
 	while (wsk->next != NULL)
 	{
 		wsk = wsk->next; /*znajaduje ostatni el listy*/
@@ -115,17 +113,6 @@ void dodaj_do_listy(el_listy *lista, el_klientow *listaa, string nazwa, string k
 	nowy->opis = opis;
 	nowy->next = NULL;
 	wsk->next = nowy; /*podczepiam wsk po ten element*/
-	while (wskk->nextt != NULL)
-	{
-		if ((wskk->nextt->imie == "Jan") && (wskk->nextt->nazwisko == "Kowalski"))
-		{
-			string wystawione;
-			wystawione = wskk->nextt->wystawione;
-			wskk->nextt->wystawione = wystawione.insert(kupione.length(), ", ");
-			wskk->nextt->wystawione = wystawione.insert(kupione.length(), nazwa);
-			wskk = wskk->nextt;
-		}
-		break;
 }
 
 void zapisz_do_pliku(el_listy *lista)
@@ -145,9 +132,9 @@ void zapisz_do_pliku(el_listy *lista)
 			plik << wsk->next->cena << endl;
 			plik << wsk->next->wlasciciel << endl;
 			plik << wsk->next->kupujacy << endl;
-			plik << wsk->next->opis; 
+			plik << wsk->next->opis;
 		}
-		else 
+		else
 		{
 			plik << endl;
 			plik << wsk->next->nazwa << endl;
@@ -191,7 +178,7 @@ void usun_z_listy(el_listy *lista, int nr)
 	}
 }
 
-void kup (el_listy *lista, int nr, el_klientow *listaa)
+void kup(el_listy *lista, int nr, el_klientow *listaa)
 {
 	el_listy *wsk = lista;
 	el_klientow *wskk = listaa;
@@ -310,7 +297,7 @@ void sortowanie_cena()
 				temp_opis = wsk->opis;
 				wsk->opis = wsk->next->opis;
 				wsk->next->opis = temp_opis;
-			}	
+			}
 }
 
 void sortowanie_nazwy()
@@ -516,7 +503,7 @@ int znajdz(el_listy *lista)
 
 		wsk = wsk->next;
 	}
-	
+
 }
 
 
@@ -538,21 +525,21 @@ void logo()
 
 /*void klienci_dane(el_listy *lista, string tab[], int size, int i)
 {
-	int kwota_sprzedanych = 0;
-	el_listy *wsk = lista;
-	while (wsk->next != NULL)
-	{
-		if ((wsk->next->wlasciciel == (tab[i] + tab[i + 1])) && (wsk->next->status == "Sprzedane"))
-		{
-			nowy->kwota_sprzedanych = wsk->next->cena + kwota_sprzedanych;
-			wsk = wsk->next;
-		}
-		else
-		{
-			wsk = wsk->next;
-		}
-		i++;
-	}
+int kwota_sprzedanych = 0;
+el_listy *wsk = lista;
+while (wsk->next != NULL)
+{
+if ((wsk->next->wlasciciel == (tab[i] + tab[i + 1])) && (wsk->next->status == "Sprzedane"))
+{
+nowy->kwota_sprzedanych = wsk->next->cena + kwota_sprzedanych;
+wsk = wsk->next;
+}
+else
+{
+wsk = wsk->next;
+}
+i++;
+}
 
 }*/
 
@@ -690,7 +677,7 @@ void edytuj_klienci(el_klientow *lista, string imie, string nazwisko, string now
 	el_klientow *wsk = lista;
 	while (wsk->nextt != NULL)
 	{
-		if ((wsk->nextt->imie == imie)&&(wsk->nextt->nazwisko == nazwisko))
+		if ((wsk->nextt->imie == imie) && (wsk->nextt->nazwisko == nazwisko))
 		{
 			wsk->nextt->imie = nowe_imie;
 			wsk->nextt->nazwisko = nowe_nazwisko;
@@ -959,7 +946,7 @@ int main()
 				cin.ignore();
 				getline(cin, opis);
 
-				dodaj_do_listy(first, firstt, nazwa, kategoria, cena, opis);
+				dodaj_do_listy(first, nazwa, kategoria, cena, opis);
 				zapisz_do_pliku(first);
 				zapisz_do_pliku_klienci(firstt);
 				break;
@@ -974,7 +961,7 @@ int main()
 				//Sleep(9000);
 
 				break;
-			case 3: 
+			case 3:
 				sortowanie_nazwy();
 				break;
 			case 4:
@@ -990,7 +977,7 @@ int main()
 				znajdz(first);
 				Sleep(9000);
 				break;
-			case 8:  
+			case 8:
 				cout << "Podaj ID aukcji ktora chcesz edytowac: ";
 				cin >> id;
 				cout << "Podaj nazwe: ";
@@ -1110,7 +1097,7 @@ int main()
 	}
 
 	else if (wybor == 3)
-	exit(0);
+		exit(0);
 
 	system("pause");
 	return 0;
