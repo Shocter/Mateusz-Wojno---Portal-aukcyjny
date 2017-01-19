@@ -482,7 +482,7 @@ void wypisz_liste(el_listy *lista)
 	}
 }
 
-int znajdz(el_listy *lista)
+void znajdz(el_listy *lista)
 {
 	cout << "Podaj nazwe aukcji ktora chesz wyszukac" << endl;
 	string nazwa;
@@ -490,17 +490,29 @@ int znajdz(el_listy *lista)
 	el_listy *wsk = lista;
 	while (wsk->next != NULL)
 	{
-		size_t pozycja = wsk->nazwa.find(nazwa);
-		if (pozycja == string::npos)
-			return 0;
-		else
+		size_t znaleziona_pozycja = wsk->nazwa.find(nazwa);
+		if (znaleziona_pozycja != std::string::npos)
 		{
-			cout << wsk->nazwa << endl;
-			pozycja = wsk->nazwa.find(nazwa, pozycja + nazwa.size());
-			cout << pozycja;
+			cout << left;
+			cout.width(23);
+			cout << wsk->nazwa;
+			cout.width(10);
+			cout << wsk->unikalny_nr;
+			cout.width(20);
+			cout << wsk->kategoria;
+			cout.width(15);
+			cout << wsk->status;
+			cout.width(10);
+			cout << wsk->cena;
+			cout.width(25);
+			cout << wsk->wlasciciel;
+			cout.width(25);
+			cout << wsk->kupujacy;
+			cout.width(60);
+			cout << wsk->opis << endl;
 			wsk = wsk->next;
 		}
-
+		else
 		wsk = wsk->next;
 	}
 
@@ -521,27 +533,6 @@ void logo()
 	cout << "============================" << endl << endl;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 }
-
-
-/*void klienci_dane(el_listy *lista, string tab[], int size, int i)
-{
-int kwota_sprzedanych = 0;
-el_listy *wsk = lista;
-while (wsk->next != NULL)
-{
-if ((wsk->next->wlasciciel == (tab[i] + tab[i + 1])) && (wsk->next->status == "Sprzedane"))
-{
-nowy->kwota_sprzedanych = wsk->next->cena + kwota_sprzedanych;
-wsk = wsk->next;
-}
-else
-{
-wsk = wsk->next;
-}
-i++;
-}
-
-}*/
 
 void dodaj_klienci(el_klientow *lista, int i, string tab[], int size)
 {
@@ -838,6 +829,37 @@ void wypisz_klientow(el_klientow *lista)
 	}
 }
 
+void znajdz_klientow(el_klientow *lista)
+{
+	cout << "Podaj nazwisko klienta ktora chesz wyszukac" << endl;
+	string nazwisko;
+	cin >> nazwisko;
+	el_klientow *wsk = lista;
+	while (wsk->nextt != NULL)
+	{
+		size_t znaleziona_pozycja = wsk->nazwisko.find(nazwisko);
+		if (znaleziona_pozycja != std::string::npos)
+		{
+			cout << left;
+			cout.width(23);
+			cout << wsk->imie;
+			cout.width(25);
+			cout << wsk->nazwisko;
+			cout.width(30);
+			cout << wsk->kwota_zakupow;
+			cout.width(30);
+			cout << wsk->kwota_sprzedanych;
+			cout.width(30);
+			cout << wsk->kupione;
+			cout.width(30);
+			cout << wsk->wystawione << endl;
+			wsk = wsk->nextt;
+		}
+		else
+			wsk = wsk->nextt;
+	}
+}
+
 int main()
 {
 	string nazwa;
@@ -957,9 +979,6 @@ int main()
 				Sleep(3000);
 				zapisz_do_pliku(first);
 				zapisz_do_pliku_klienci(firstt);
-				//wypisz_klientow(firstt);
-				//Sleep(9000);
-
 				break;
 			case 3:
 				sortowanie_nazwy();
@@ -1080,7 +1099,8 @@ int main()
 				zapisz_do_pliku_klienci(firstt);
 				break;
 			case 4:
-				cout << "Brak";
+				znajdz_klientow(firstt);
+				Sleep(9000);
 				break;
 			case 5:
 				sortowanie_nazwiska_klienci();
